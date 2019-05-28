@@ -1,0 +1,29 @@
+{
+  "name": "@panda-clouds/stripe",
+  "scripts": {
+    "pretest": "eslint .",
+    "test": "jest"
+  },
+  "description": "A Node wrapper for stripe",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panda-clouds/stripe.git"
+  },
+  "author": {
+    "name": "Marc Smith",
+    "email": "mr.marcsmith@me.com",
+    "url": "https://github.com/mrmarcsmith"
+  },
+  "license": "MIT",
+  "main": "src/stripe.js",
+  "engines": {
+    "node": ">= 8"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@panda-clouds/eslint-config-panda-clouds": "^0.9.0",
+    "jest": "^24.1.0",
+    "eslint": "^5.14.1"
+  }
+}
