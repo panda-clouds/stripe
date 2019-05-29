@@ -13,7 +13,7 @@ try {
 //
 // 1. go to https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_F9qAHcnb9ICmtKU8Ra6JLX3LXgdGDKKe&scope=read_write
 // 2. in the top banner press "Skip this account form"
-// 3. replace the "auth_code" variable below v
+// 3. grab the "ac_bla" token from the page and replace the "auth_code" variable below v
 // 4. run the tests
 
 describe('test OAuth', () => {
