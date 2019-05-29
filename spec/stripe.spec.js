@@ -9,15 +9,18 @@ try {
 }
 
 describe('test OAuth', () => {
-	let auth_code = "ac_F9sFFZHsRkxIKT0hAX5TzHozsRWHHGlo";
-	let client_secret = "sk_test_hPTcgGfDuH0frQtuABpPXloO";
+	const auth_code = 'ac_F9sFFZHsRkxIKT0hAX5TzHozsRWHHGlo';
+	const client_secret = 'sk_test_hPTcgGfDuH0frQtuABpPXloO';
 
-	it('should fetch credentials from stripe', () => {
-		let promise = PCStripe.getUserIdFromSTripe(auth_code, client_secret);
+	it('should fetch credentials from stripe', async () => {
+		expect.assertions(2);
+		const response = await PCStripe.getUserIdFromStripe(auth_code, client_secret);
 
-		//TODO: do actual expectations.
-		expect.assertions(1);
-		expect(3).toBe(3);
-		PCStripe.pass();
+		// TODO: finish actual expectations.
+		console.log(response);
+		console.log(JSON.stringify(response));
+
+		expect(response.stripe_publishable_key).stringContaining('pk_test_');
+		expect(response.token_type).toBe('bearer');
 	});
 });
