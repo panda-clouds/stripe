@@ -18,12 +18,19 @@ try {
 // 4. run the tests
 
 describe('test OAuth', () => {
-	const auth_code = 'ac_F9t8vXDZstWReAWeEh3xKObocil9Rapn';
-	const client_secret = 'sk_test_hPTcgGfDuH0frQtuABpPXloO';
+	const auth_code = 'ac_FADM0yNi7xnIg377iicTbLaDtlRDDhgi';
 
-	it('should fetch credentials from stripe', async () => {
+	it('should create the oauth link', async () => {
+		expect.assertions(1);
+
+		const join_link = await PCStripe.getStripeOAuthLink();
+
+		expect(join_link).toContain('scope=read_write');
+	});
+
+	xit('should fetch credentials from stripe', async () => {
 		expect.assertions(7);
-		const response = await PCStripe.getUserIdFromStripe(auth_code, client_secret);
+		const response = await PCStripe.getUserIdFromStripe(auth_code);
 
 		expect(response.access_token).toContain('sk_test_');
 		expect(response.livemode).toBe(false);
