@@ -1,9 +1,9 @@
 
-<PCName>
+PCStripe
 =========
 maintained by [PandaClouds.com](https://pandaclouds.com)
 
-`<PCName>` provides a clean way to validate data in Parse Sever Cloud Code.
+`PCStripe` provides a clean way to validate data in Parse Sever Cloud Code.
 
 
 Installation
@@ -42,13 +42,13 @@ Usage
 ### Node.js
 
 ```javascript
-const <PCName> = require('@panda-clouds/<pc-name>');
+const PCStripe = require('@panda-clouds/<pc-name>');
 
 // example usage
 
 ```
 
-You can replace <PCName> with any variable.
+You can replace PCStripe with any variable.
 
 
 Methods
@@ -65,7 +65,7 @@ Example:
 
 ```javascript
 Parse.Cloud.beforeSave('Book', request =>{
-	const data = new <PCName>(request);
+	const data = new PCStripe(request);
 	data.prop('title').mustExist();    // will throw Error if request.object.get('title') doesn't exist
 });
 ```
@@ -77,8 +77,8 @@ Contributions
 
 Pull requests are welcome! here is a checklist to speed things up:
 
-- modify `<PCName>.js`
-- add unit tests in `<PCName>.spec.js`
+- modify `PCStripe.js`
+- add unit tests in `PCStripe.spec.js`
 - run `npm test`
 - document method in `README.md`
 - add your name to 'Contributors' in `README.md`
@@ -91,4 +91,4 @@ Pull requests are welcome! here is a checklist to speed things up:
 - [*] [Marc Smith](https://github.com/mrmarcsmith)
 
 
-[Unit Tests]: https://github.com/panda-clouds/string/blob/master/spec/<PCName>.spec.js
+[Unit Tests]: https://github.com/panda-clouds/string/blob/master/spec/PCStripe.spec.js
