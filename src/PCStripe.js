@@ -50,6 +50,32 @@ class PCStripe {
 			resolve('sk_test_hPTcgGfDuH0frQtuABpPXloO');
 		});
 	}
+
+	static async chargeConnectedAccount(src_acct_id, charge_amount, batch_id) {
+		const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+
+		const charge = await stripe.charges.create({
+			amount: charge_amount,
+			currency: "usd",
+			source: "tok_visa",
+			transfer_group: batch_id
+		});
+
+		return charge;
+	}
+
+	static async transferToConnectedAccount(dest_acct_id, payment_amount, group_id) {
+		const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+
+		const transfer = await stripe.transfers.create({
+			amount: payment_amount,
+			currency: "usd",
+			destination: dest_acct_id,
+			transfer_group: group_id
+		});
+
+		return transfer;
+	}
 }
 
 module.exports = PCStripe;

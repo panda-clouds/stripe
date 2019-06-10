@@ -18,7 +18,7 @@ try {
 // 4. run the tests
 
 describe('test OAuth', () => {
-	const auth_code = 'ac_FADM0yNi7xnIg377iicTbLaDtlRDDhgi';
+	const auth_code = 'ac_FBiuWezs8tNG2doKWIZEYc9E720ctf9L';
 
 	it('should create the oauth link', async () => {
 		expect.assertions(1);
@@ -28,9 +28,11 @@ describe('test OAuth', () => {
 		expect(join_link).toContain('scope=read_write');
 	});
 
-	xit('should fetch credentials from stripe', async () => {
+	it('should fetch credentials from stripe', async () => {
 		expect.assertions(7);
 		const response = await PCStripe.getUserIdFromStripe(auth_code);
+
+		console.log(response);
 
 		expect(response.access_token).toContain('sk_test_');
 		expect(response.livemode).toBe(false);
@@ -39,5 +41,11 @@ describe('test OAuth', () => {
 		expect(response.stripe_publishable_key).toContain('pk_test_');
 		expect(response.stripe_user_id).toContain('acct_');
 		expect(response.scope).toBe('read_write');
+	});
+
+	it('should make transfers', async () => {
+		expect.assertions(1);
+
+		const transfer = await PCStripe.transferToConnectedAccount()
 	});
 });
