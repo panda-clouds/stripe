@@ -49,11 +49,14 @@ describe('test OAuth', () => {
 	});
 
 	it('should make transfers', async () => {
-		expect.assertions(1);
+		expect.assertions(2);
 
 		// comment
 		const transfer = await myStripe.transferToConnectedAccount(account_id, 350, 'parent_job_id');
 
-		expect(transfer).toBe(1);
+		// transfer is
+		// {"amount": 350, "amount_reversed": 0, "balance_transaction": "txn_1Ejv2GL54TAiok0DXZAFspzV", "created": 1560202092, "currency": "usd", "description": null, "destination": "acct_1EjuhUKT5Kn7XEO2", "destination_payment": "py_1Ejv2HKT5Kn7XEO2pQWHYKQT", "id": "tr_1Ejv2GL54TAiok0DP8DMglnZ", "livemode": false, "metadata": {}, "object": "transfer", "reversals": {"data": [], "has_more": false, "object": "list", "total_count": 0, "url": "/v1/transfers/tr_1Ejv2GL54TAiok0DP8DMglnZ/reversals"}, "reversed": false, "source_transaction": null, "source_type": "card", "transfer_group": "parent_job_id"}
+		expect(transfer.amount).toBe(350);
+		expect(transfer.balance_transaction).toContain('txn_');
 	});
 });
