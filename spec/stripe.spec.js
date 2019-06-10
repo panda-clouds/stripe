@@ -1,6 +1,6 @@
 
 const PCStripe = require('../src/PCStripe.js');
-const myStripe = new PCStripe('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const myStripe = new PCStripe('sk_test_hPTcgGfDuH0frQtuABpPXloO');
 
 try {
 	require('../apiKeys.js')();
@@ -19,7 +19,9 @@ try {
 // 4. run the tests
 
 describe('test OAuth', () => {
-	const auth_code = 'ac_FBiuWezs8tNG2doKWIZEYc9E720ctf9L';
+	// const auth_code = 'ac_FBiuWezs8tNG2doKWIZEYc9E720ctf9L';
+	const refreshToken = 'rt_FENTYwbxoKbaLMsPtfQmrNbJzeAvXd2qyOVkUh2AzGbQigzU';
+	let account_id;
 
 	it('should create the oauth link', async () => {
 		expect.assertions(1);
@@ -29,9 +31,10 @@ describe('test OAuth', () => {
 		expect(join_link).toContain('scope=read_write');
 	});
 
+	// Test cannot run with stripes system without human interviention and is disabled for production test suites.
 	it('should fetch credentials from stripe', async () => {
 		expect.assertions(7);
-		const response = await myStripe.getUserIdFromStripe(auth_code);
+		const response = await myStripe.getUserIdFromStripeRefresh(refreshToken);
 
 		console.log(response);
 
@@ -41,13 +44,16 @@ describe('test OAuth', () => {
 		expect(response.token_type).toBe('bearer');
 		expect(response.stripe_publishable_key).toContain('pk_test_');
 		expect(response.stripe_user_id).toContain('acct_');
+		account_id = response.stripe_user_id;
 		expect(response.scope).toBe('read_write');
 	});
 
 	it('should make transfers', async () => {
 		expect.assertions(1);
 
-		// TODO: finish test
-		const transfer = await myStripe.transferToConnectedAccount()
+		// comment
+		const transfer = await myStripe.transferToConnectedAccount(account_id, 350, 'parent_job_id');
+
+		expect(transfer).toBe(1);
 	});
 });
