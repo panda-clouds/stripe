@@ -16,7 +16,7 @@ Installation
 3. Please run the following command.
 
 ```
-npm install --save @panda-clouds/<pc-name>
+npm install --save @panda-clouds/stripe
 ```
 
 Keys
@@ -42,13 +42,13 @@ Usage
 ### Node.js
 
 ```javascript
-const <PCName> = require('@panda-clouds/<pc-name>');
+const PCStripe = require('@panda-clouds/stripe');
 
 // example usage
 
 ```
 
-You can replace <PCName> with any variable.
+You can replace PCStripe with any variable.
 
 
 Methods
@@ -70,6 +70,57 @@ Parse.Cloud.beforeSave('Book', request =>{
 });
 ```
 
+### - getUserIdFromStripe(auth_code)
+
+Using the stripe authentication code, retrieves the user data for the user in the OAuth workflow.
+
+args:
+	auth_code: stripe authentication code provided by OAuth workflow.
+
+return:
+	json object with user details. 
+
+Example:
+
+```javascript
+const stripe = new PCStripe('shhh_secret_key');
+const response = await stripe.getUserIdFromStripe('auth_code');
+````
+
+### - getUserIdFromStripeRefresh(refresh_token)
+
+Using the refresh token, retrieves the user data for the user in the oauth workflow.
+
+args:
+	refresh_token: refresh token provided by getUserIdFromStripe for re-use after auth code expires.
+
+return:
+	json object with user details. 
+
+Example:
+
+```javascript
+const stripe = new PCStripe('shhh_secret_key');
+const response = await stripe.getUserIdFromStripeRefresh('refresh_token');
+````
+
+### - transferToConnectedAccount(dest_acct_id, payment_amount, group_id)
+
+Transfer funds to a connected stripe account.
+
+args:
+	dest_acct_id: stripe account id of the account to transfer funds into.
+	payment_amount: amount in cents(USD) to transfer.
+	group_id: used for book keeping purposes in order for transactions to be grouped together.
+return:
+	json object returned by stripe regarding transaction.
+
+Example:
+
+```javascript
+const stripe = new PCStripe('shhh_secret_key');
+const response = await stripe.transferToConnectedAccount('acct_lnm', 350, 'lnm_payout_group');
+````
 
 
 Contributions
