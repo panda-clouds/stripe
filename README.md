@@ -19,6 +19,22 @@ Installation
 npm install --save @panda-clouds/<pc-name>
 ```
 
+Keys
+----
+Problem:
+It's a bad secuirty commit our Stripe API Keys to this repo.
+
+Solution:
+we have devised a system for each user to create a .gitignored file called 'apiKeys.js' that contains your specific keys.
+Run these commands to create the boiler plate "apiKeys.js" file. then replace with your own values.
+Git should never ask you to commit this file.
+
+1. cd /my/path/to/proj
+2. `echo -e "module.exports = function() {\n\tprocess.env.STRIPE_SECRET_KEY = 'sk_test_123';\n\tprocess.env.STRIPE_CLIENT_ID = 'ca_123';\n\tprocess.env.STRIPE_REFRESH_TOKEN = 'rt_123';\n\tprocess.env.STRIPE_AUTH_CODE = 'ac_123';\n};\n" > apiKeys.js`
+3. open the file and replace `sk_test_123` with your key
+
+
+
 Usage
 -----
 
