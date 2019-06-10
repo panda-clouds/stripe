@@ -22,7 +22,7 @@ npm install --save @panda-clouds/<pc-name>
 Keys
 ----
 Problem:
-It's a bad secuirty to commit our Stripe API Keys to this repo.
+It's a bad secuirty practice to commit our Stripe API Keys to this repo.
 
 Solution:
 we have devised a system for each user to create a .gitignored file called 'apiKeys.js' that contains your specific keys.
