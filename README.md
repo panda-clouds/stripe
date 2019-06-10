@@ -19,7 +19,7 @@ Installation
 npm install --save @panda-clouds/<pc-name>
 ```
 
-Keys
+API Keys
 ----
 Problem:
 It's a bad secuirty practice to commit our Stripe API Keys to this repo.
