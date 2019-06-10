@@ -1,9 +1,9 @@
 
-<PCName>
+PCStripe
 =========
 maintained by [PandaClouds.com](https://pandaclouds.com)
 
-`<PCName>` provides a clean way to validate data in Parse Sever Cloud Code.
+`PCStripe` provides a clean way to validate data in Parse Sever Cloud Code.
 
 
 Installation
@@ -19,10 +19,10 @@ Installation
 npm install --save @panda-clouds/stripe
 ```
 
-Keys
+API Keys
 ----
 Problem:
-It's a bad secuirty to commit our Stripe API Keys to this repo.
+It's a bad secuirty practice to commit our Stripe API Keys to this repo.
 
 Solution:
 we have devised a system for each user to create a .gitignored file called 'apiKeys.js' that contains your specific keys.
@@ -43,6 +43,7 @@ Usage
 
 ```javascript
 const PCStripe = require('@panda-clouds/stripe');
+
 
 // example usage
 
@@ -65,7 +66,7 @@ Example:
 
 ```javascript
 Parse.Cloud.beforeSave('Book', request =>{
-	const data = new <PCName>(request);
+	const data = new PCStripe(request);
 	data.prop('title').mustExist();    // will throw Error if request.object.get('title') doesn't exist
 });
 ```
@@ -128,8 +129,8 @@ Contributions
 
 Pull requests are welcome! here is a checklist to speed things up:
 
-- modify `<PCName>.js`
-- add unit tests in `<PCName>.spec.js`
+- modify `PCStripe.js`
+- add unit tests in `PCStripe.spec.js`
 - run `npm test`
 - document method in `README.md`
 - add your name to 'Contributors' in `README.md`
@@ -142,4 +143,4 @@ Pull requests are welcome! here is a checklist to speed things up:
 - [*] [Marc Smith](https://github.com/mrmarcsmith)
 
 
-[Unit Tests]: https://github.com/panda-clouds/string/blob/master/spec/<PCName>.spec.js
+[Unit Tests]: https://github.com/panda-clouds/string/blob/master/spec/PCStripe.spec.js
