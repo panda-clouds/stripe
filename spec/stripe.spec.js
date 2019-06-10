@@ -1,5 +1,6 @@
 
 const PCStripe = require('../src/PCStripe.js');
+const myStripe = new PCStripe('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 try {
 	require('../apiKeys.js')();
@@ -30,7 +31,7 @@ describe('test OAuth', () => {
 
 	it('should fetch credentials from stripe', async () => {
 		expect.assertions(7);
-		const response = await PCStripe.getUserIdFromStripe(auth_code);
+		const response = await myStripe.getUserIdFromStripe(auth_code);
 
 		console.log(response);
 
@@ -46,6 +47,7 @@ describe('test OAuth', () => {
 	it('should make transfers', async () => {
 		expect.assertions(1);
 
-		const transfer = await PCStripe.transferToConnectedAccount()
+		// TODO: finish test
+		const transfer = await myStripe.transferToConnectedAccount()
 	});
 });
