@@ -66,7 +66,7 @@ describe('test OAuth', () => {
 		expect(response.scope).toBe('read_write');
 	});
 
-	it('should make transfers', async () => {
+	xit('should make transfers', async () => {
 		expect.assertions(2);
 
 		// comment
@@ -76,5 +76,16 @@ describe('test OAuth', () => {
 		// {"amount": 350, "amount_reversed": 0, "balance_transaction": "txn_123", "created": 1560202092, "currency": "usd", "description": null, "destination": "acct_123", "destination_payment": "py_123", "id": "tr_123", "livemode": false, "metadata": {}, "object": "transfer", "reversals": {"data": [], "has_more": false, "object": "list", "total_count": 0, "url": "/v1/transfers/tr_123/reversals"}, "reversed": false, "source_transaction": null, "source_type": "card", "transfer_group": "parent_job_id"}
 		expect(transfer.amount).toBe(350);
 		expect(transfer.balance_transaction).toContain('txn_');
+	});
+
+	it('should make charges', async () => {
+		expect.assertions(2);
+
+		const charge = await myStripe.chargeConnectedAccount(account_id, 420, 'charge_spec', 'used in charge spec');
+
+		console.log('charge: ' + JSON.stringify(charge));
+
+		expect(charge.amount).toBe(420);
+		expect(charge.balance_transaction).toContain('txn_');
 	});
 });

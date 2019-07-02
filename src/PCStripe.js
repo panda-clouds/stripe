@@ -61,6 +61,18 @@ class PCStripe {
 
 		return transfer;
 	}
+
+	async chargeConnectedAccount(src_acct_id, charge_amount, group_id, desc) {
+		const charge = await this.stripe.charges.create({
+			amount: charge_amount,
+			currency: 'usd',
+			source: src_acct_id,
+			transfer_group: group_id,
+			description: desc,
+		});
+
+		return charge;
+	}
 }
 
 module.exports = PCStripe;
