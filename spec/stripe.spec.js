@@ -24,6 +24,7 @@ describe('test OAuth', () => {
 	const refreshToken = process.env.STRIPE_REFRESH_TOKEN;
 	const auth_code = process.env.STRIPE_AUTH_CODE;
 	let account_id;
+	let customer_id;
 
 	xit('should fetch credentials from stripe', async () => {
 		expect.assertions(7);
@@ -78,14 +79,21 @@ describe('test OAuth', () => {
 		expect(transfer.balance_transaction).toContain('txn_');
 	});
 
-	it('should make charges', async () => {
-		expect.assertions(2);
+	it('should create customers', async () => {
+		expect.assertions(1);
 
-		const charge = await myStripe.chargeConnectedAccount(account_id, 420, 'charge_spec', 'used in charge spec');
+		const customer = await myStripe.getOrCreateAccount('', 'address@website.com', { name: 'first last' });
 
-		console.log('charge: ' + JSON.stringify(charge));
+		customer_id = customer.id;
 
-		expect(charge.amount).toBe(420);
-		expect(charge.balance_transaction).toContain('txn_');
+		expect(customer).toBeDefined();
+	});
+
+	it('should be able to retrieve that customer', async () => {
+		expect.assertions(1);
+
+		const customer = await myStripe.getOrCreateAccount(customer_id);
+
+		expect(customer).toBeDefined();
 	});
 });
