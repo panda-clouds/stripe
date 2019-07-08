@@ -61,6 +61,23 @@ class PCStripe {
 
 		return transfer;
 	}
+
+	async getOrCreateAccount(customer_id, email = 'na', metadata = null) {
+		let customer = null;
+
+		if (customer_id.includes('cus')) {
+			customer = await this.stripe.customers.retrieve(customer_id);
+		}
+
+		if (!customer) {
+			customer = await this.stripe.customers.create({
+				email: email,
+				metadata: metadata,
+			});
+		}
+
+		return customer;
+	}
 }
 
 module.exports = PCStripe;
