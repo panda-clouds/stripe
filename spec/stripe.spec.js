@@ -67,7 +67,7 @@ describe('test OAuth', () => {
 		expect(response.scope).toBe('read_write');
 	});
 
-	xit('should make transfers', async () => {
+	it('should make transfers', async () => {
 		expect.assertions(2);
 
 		// comment
