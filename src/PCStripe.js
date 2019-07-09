@@ -9,10 +9,7 @@ class PCStripe {
 	}
 
 	static getStripeOAuthLink(clientId) {
-		let link = 'https://connect.stripe.com/oauth/authorize?response_type=code?client_id=' + clientId;
-
-		// set scope
-		link += '&scope=read_write';
+		let link = 'https://connect.stripe.com/oauth/authorize?response_type=code&scope=read_write&client_id=' + clientId;
 
 		return link;
 	}
