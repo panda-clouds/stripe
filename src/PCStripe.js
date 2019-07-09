@@ -65,7 +65,7 @@ class PCStripe {
 	async getOrCreateAccount(customer_id, email = 'na', metadata = null) {
 		let customer = null;
 
-		if (customer_id.includes('cus')) {
+		if (customer_id && customer_id.includes('cus')) {
 			customer = await this.stripe.customers.retrieve(customer_id);
 		}
 
