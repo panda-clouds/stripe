@@ -82,7 +82,7 @@ describe('test OAuth', () => {
 	it('should create customers', async () => {
 		expect.assertions(1);
 
-		const customer = await myStripe.getOrCreateAccount('', { name: 'first last' });
+		const customer = await myStripe.getOrCreateAccount('', 'address@website.com', { name: 'first last' });
 
 		customer_id = customer.id;
 
@@ -94,6 +94,6 @@ describe('test OAuth', () => {
 
 		const customer = await myStripe.getOrCreateAccount(customer_id);
 
-		expect(customer).toBe(customer_id);
+		expect(customer.id).toBe(customer_id);
 	});
 });

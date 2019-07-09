@@ -62,7 +62,7 @@ class PCStripe {
 		return transfer;
 	}
 
-	async getOrCreateAccount(customer_id, metadata = null) {
+	async getOrCreateAccount(customer_id, email = null, metadata = null) {
 		let customer = null;
 
 		if (customer_id && customer_id.includes('cus')) {
@@ -71,7 +71,7 @@ class PCStripe {
 
 		if (!customer) {
 			customer = await this.stripe.customers.create({
-				email: email,
+				email: email ? email : 'n/a',
 				metadata: metadata,
 			});
 		}
