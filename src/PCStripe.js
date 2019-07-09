@@ -62,7 +62,7 @@ class PCStripe {
 		return transfer;
 	}
 
-	async getOrCreateAccount(customer_id, email = 'na', metadata = null) {
+	async getOrCreateAccount(customer_id, metadata = null) {
 		let customer = null;
 
 		if (customer_id && customer_id.includes('cus')) {
