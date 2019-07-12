@@ -7,6 +7,7 @@ try {
 
 const PCStripe = require('../src/PCStripe.js');
 const myStripe = new PCStripe(process.env.STRIPE_SECRET_KEY);
+const globalStripe = new PCStripe(process.env.STRIPE_GLOBAL_SECRET_KEY);
 
 
 // The OAuth Workflow requires UI intervention
@@ -25,6 +26,8 @@ describe('test OAuth', () => {
 	const auth_code = process.env.STRIPE_AUTH_CODE;
 	let account_id;
 	let customer_id;
+	let global_customer;
+	let token;
 
 	xit('should fetch credentials from stripe', async () => {
 		expect.assertions(7);
@@ -79,21 +82,108 @@ describe('test OAuth', () => {
 		expect(transfer.balance_transaction).toContain('txn_');
 	});
 
-	it('should create customers', async () => {
-		expect.assertions(1);
+	describe('getOrCreateAccount', () => {
+		it('should create customers', async () => {
+			expect.assertions(1);
 
-		const customer = await myStripe.getOrCreateAccount('', 'address@website.com', { name: 'first last' });
+			const customer = await myStripe.getOrCreateAccount(null, 'spec@mindmissiles.com', { name: 'first last' });
 
-		customer_id = customer.id;
+			customer_id = customer.id;
 
-		expect(customer).toBeDefined();
+			expect(customer).toBeDefined();
+		});
+
+		it('should be able to retrieve that customer', async () => {
+			expect.assertions(1);
+
+			const customer = await myStripe.getOrCreateAccount(customer_id);
+
+			expect(customer.id).toBe(customer_id);
+		});
+
+		it('should fill in an email with default if none is provided', async () => {
+			expect.assertions(1);
+
+			const customer = await myStripe.getOrCreateAccount();
+
+			expect(customer.email).toBe('n/a');
+		});
 	});
 
-	it('should be able to retrieve that customer', async () => {
-		expect.assertions(1);
+	describe('addPaymentToken', () => {
+		let global_token = null;
 
-		const customer = await myStripe.getOrCreateAccount(customer_id);
+		it('should create a global customer', async () => {
+			expect.assertions(1);
 
-		expect(customer.id).toBe(customer_id);
+			global_customer = await globalStripe.getOrCreateAccount('', 'spec@mindmissiles.com', { name: 'first last' });
+
+			expect(global_customer).toBeDefined();
+		});
+
+		it('should add a credit card', async () => {
+			expect.assertions(1);
+
+			global_token = await globalStripe.stripe.tokens.create({
+				card: {
+					number: '4242424242424242',
+					exp_month: 12,
+					exp_year: 2020,
+					cvc: '123',
+				},
+			});
+
+			expect(global_token).toBeDefined();
+		});
+
+		it('should add the card to the customer.', async () => {
+			expect.assertions(1);
+
+			const source = await globalStripe.addPaymentToken(global_token.id, global_customer.id, true);
+
+			expect(source).toBeDefined();
+		});
 	});
+
+	describe('createCustomerToken', () => {
+		xit('should error if the customer doesnt have a payment', async () => {
+			expect.assertions(1);
+
+			const no_payment = await globalStripe.getOrCreateAccount();
+
+			await expect(globalStripe.createCustomerToken(no_payment.id, process.env.STRIPE_ACCOUNT_NUMBER)).rejects.toThrow('Error');
+		});
+
+		it('should create a customer token', async () => {
+			expect.assertions(1);
+
+			token = await globalStripe.createCustomerToken(global_customer.id, process.env.STRIPE_ACCOUNT_NUMBER);
+
+			expect(token).toBeDefined();
+		});
+	});
+
+	describe('updateCustomerWithToken', () => {
+		it('should update the customer with the token', async () => {
+			expect.assertions(1);
+
+			await myStripe.updateCustomerWithToken(customer_id, token.id);
+
+			expect(true).toBe(true);
+		});
+	});
+
+	describe('createCharge', () => {
+		it('should create a charge', async () => {
+			expect.assertions(1);
+
+			const charge = await myStripe.createCharge(350, 'usd', customer_id, process.env.STRIPE_ACCOUNT_NUMBER);
+
+			expect(charge).toBeDefined();
+		});
+	});
+
+	// describe('processStripeError', () => {
+
+	// });
 });

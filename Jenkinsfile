@@ -10,6 +10,8 @@ pipeline {
     stage('Test') {
       environment {
         STRIPE_SECRET_KEY = credentials('stripe-district-0-secret-key')
+        STRIPE_GLOBAL_SECRET_KEY = credentials('stripe-global-secret-key')
+        STRIPE_ACCOUNT_NUMBER = credentials('stripe-test-account')
         STRIPE_CLIENT_ID = credentials('stripe-district-0-client-id')
         STRIPE_REFRESH_TOKEN = credentials('stripe-district-0-refresh-token')
         STRIPE_AUTH_CODE = credentials('stripe-district-0-auth-code')

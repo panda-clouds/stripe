@@ -59,21 +59,94 @@ class PCStripe {
 		return transfer;
 	}
 
-	async getOrCreateAccount(customer_id, email = null, metadata = null) {
+	async getOrCreateAccount(customer_id = null, email = null, metadata = null) {
 		let customer = null;
 
-		if (customer_id && customer_id.includes('cus')) {
-			customer = await this.stripe.customers.retrieve(customer_id);
-		}
+		try {
+			if (customer_id && customer_id.includes('cus')) {
+				customer = await this.stripe.customers.retrieve(customer_id);
+			}
 
-		if (!customer) {
-			customer = await this.stripe.customers.create({
-				email: email ? email : 'n/a',
-				metadata: metadata,
+			if (!customer) {
+				customer = await this.stripe.customers.create({
+					email: email ? email : 'n/a',
+					metadata: metadata,
+				});
+			}
+
+			return customer;
+		} catch (e) {
+			this.processStripeError(e);
+		}
+	}
+
+	async createCustomerToken(global_id, stripe_acct_num) {
+		let token = null;
+
+		try {
+			token = await this.stripe.tokens.create({
+				customer: global_id,
+			}, {
+				stripe_account: stripe_acct_num,
 			});
-		}
 
-		return customer;
+			return token;
+		} catch (e) {
+			this.processStripeError(e);
+		}
+	}
+
+	async updateCustomerWithToken(customer_id, token_id) {
+		try {
+			await this.stripe.customers.update(customer_id, { source: token_id });
+		} catch (e) {
+			this.processStripeError(e);
+		}
+	}
+
+	async createCharge(amount, currency, customer_id, stripe_acct_num) {
+		let charge = null;
+
+		try {
+			charge = await this.stripe.charges.create({
+				amount: amount,
+				currency: currency,
+				customer: customer_id,
+			}, {
+				stripe_account: stripe_acct_num,
+			});
+
+			return charge;
+		} catch (e) {
+			this.processStripeError(e);
+		}
+	}
+
+	async addPaymentToken(token_id, customer_id, is_default) {
+		let source = null;
+
+		try {
+			source = await this.stripe.customers.createSource(customer_id, {
+				source: token_id,
+			});
+
+			if (is_default) {
+				await this.stripe.customers.update(customer_id, {
+					default_source: source.id,
+				});
+			}
+
+			return source;
+		} catch (e) {
+			this.processStripeError(e);
+		}
+	}
+
+	processStripeError(e) {
+		if (e) {
+			console.log(e);
+			throw Error('Error');
+		}
 	}
 }
 
