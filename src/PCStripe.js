@@ -144,9 +144,48 @@ class PCStripe {
 
 	processStripeError(e) {
 		if (e) {
-			console.log(e);
-			throw Error('Error');
+			switch (e.code) {
+				case 'email_invalid':
+					throw Error('Invalid email address');
+				case 'card_declined':
+					throw Error('Payment declined');
+				case 'expired_card':
+					throw Error('Card has expired');
+				case 'incorrect_cvc':
+					throw Error('CVC does not match');
+				case 'incorrect_number':
+					throw Error('Invalid card number');
+				case 'processing_error':
+					throw Error('Error processing payment');
+				default:
+					if (e.message === 'The customer must have an active payment source attached.') {
+						throw Error('No payment source.');
+					}
+
+					console.log(e);
+					throw Error('unhandled error');
+			}
 		}
+	}
+
+	async createTestUser(email, num, exp_month, exp_year, cvc) {
+		// create the user
+		const customer = await this.getOrCreateAccount('', email);
+
+		// give them a card.
+		const card = await this.stripe.tokens.create({
+			card: {
+				number: num,
+				exp_month: exp_month,
+				exp_year: exp_year,
+				cvc: cvc,
+			},
+		});
+
+		// add the card to the customer
+		await this.addPaymentToken(card.id, customer.id, true);
+
+		return customer;
 	}
 }
 
