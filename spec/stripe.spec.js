@@ -146,12 +146,12 @@ describe('test OAuth', () => {
 	});
 
 	describe('createCustomerToken', () => {
-		xit('should error if the customer doesnt have a payment', async () => {
+		it('should error if the customer doesnt have a payment', async () => {
 			expect.assertions(1);
 
-			const no_payment = await globalStripe.getOrCreateAccount();
+			const no_payment = await globalStripe.getOrCreateAccount('', 'nopayment@spec.com');
 
-			await expect(globalStripe.createCustomerToken(no_payment.id, process.env.STRIPE_ACCOUNT_NUMBER)).rejects.toThrow('Error');
+			await expect(globalStripe.createCustomerToken(no_payment.id, process.env.STRIPE_ACCOUNT_NUMBER)).rejects.toThrow('No payment source.');
 		});
 
 		it('should create a customer token', async () => {
@@ -201,54 +201,31 @@ describe('test OAuth', () => {
 		it('should error if the card was declined', async () => {
 			expect.assertions(1);
 
-			const cust = await globalStripe.createTestUser('declined@spec.com', '4000000000000002', 12, 2020, 123);
-
-			// try to charge it.
-			await expect(globalStripe.createCharge(350, 'usd', cust.id, process.env.STRIPE_ACCOUNT_NUMBER)).rejects.toThrow('Payment declined');
+			await expect(globalStripe.createTestUser('declined@spec.com', '4000000000000002', 12, 2020, 123)).rejects.toThrow('Payment declined');
 		});
 
 		it('should error if the card is expired', async () => {
 			expect.assertions(1);
 
-			const cust = await globalStripe.createTestUser('declined@spec.com', '4000000000000069', 12, 2020, 123);
-
-			// try to charge it.
-			await expect(globalStripe.createCharge(350, 'usd', cust.id, process.env.STRIPE_ACCOUNT_NUMBER)).rejects.toThrow('Card expired');
+			await expect(globalStripe.createTestUser('expired@spec.com', '4000000000000069', 12, 2020, 123)).rejects.toThrow('Card has expired');
 		});
 
 		it('should error if the cvc is incorrect', async () => {
 			expect.assertions(1);
 
-			const cust = await globalStripe.createTestUser('declined@spec.com', '4000000000000127', 12, 2020, 123);
-
-			// try to charge it.
-			await expect(globalStripe.createCharge(350, 'usd', cust.id, process.env.STRIPE_ACCOUNT_NUMBER)).rejects.toThrow('CVC does nto match');
+			await expect(globalStripe.createTestUser('incorrect@spec.com', '4000000000000127', 12, 2020, 123)).rejects.toThrow('CVC does not match');
 		});
 
-		xit('should error if the card number is invalid', async () => {
+		it('should error if the card number is invalid', async () => {
 			expect.assertions(1);
 
-			let cust;
-
-			try {
-				cust = await globalStripe.createTestUser('declined@spec.com', '4242424242424241', 12, 2020, 123);
-			} catch (e) {
-				console.log('test ' + e);
-			}
-
-			// try to charge it.
-			if (cust) {
-				await expect(globalStripe.createCharge(350, 'usd', cust.id, process.env.STRIPE_ACCOUNT_NUMBER)).rejects.toThrow('Invalid card number');
-			}
+			await expect(globalStripe.createTestUser('declined@spec.com', '4242424242424241', 12, 2020, 123)).rejects.toThrow('Invalid card number');
 		});
 
 		it('should error if there was a processing error', async () => {
 			expect.assertions(1);
 
-			const cust = await globalStripe.createTestUser('declined@spec.com', '4000000000000119', 12, 2020, 123);
-
-			// try to charge it.
-			await expect(globalStripe.createCharge(350, 'usd', cust.id, process.env.STRIPE_ACCOUNT_NUMBER)).rejects.toThrow('Error processing payment');
+			await expect(globalStripe.createTestUser('processing@spec.com', '4000000000000119', 12, 2020, 123)).rejects.toThrow('Error processing payment');
 		});
 	});
 });

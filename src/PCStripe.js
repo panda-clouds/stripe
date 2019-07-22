@@ -172,15 +172,21 @@ class PCStripe {
 		// create the user
 		const customer = await this.getOrCreateAccount('', email);
 
-		// give them a card.
-		const card = await this.stripe.tokens.create({
-			card: {
-				number: num,
-				exp_month: exp_month,
-				exp_year: exp_year,
-				cvc: cvc,
-			},
-		});
+		let card;
+
+		try {
+			// give them a card.
+			card = await this.stripe.tokens.create({
+				card: {
+					number: num,
+					exp_month: exp_month,
+					exp_year: exp_year,
+					cvc: cvc,
+				},
+			});
+		} catch (e) {
+			this.processStripeError(e);
+		}
 
 		// add the card to the customer
 		await this.addPaymentToken(card.id, customer.id, true);
