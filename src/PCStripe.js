@@ -144,8 +144,27 @@ class PCStripe {
 
 	processStripeError(e) {
 		if (e) {
-			console.log(e);
-			throw Error('Error');
+			switch (e.code) {
+				case 'email_invalid':
+					throw Error('Invalid email address');
+				case 'card_declined':
+					throw Error('Payment declined');
+				case 'expired_card':
+					throw Error('Card has expired');
+				case 'incorrect_cvc':
+					throw Error('CVC does not match');
+				case 'incorrect_number':
+					throw Error('Invalid card number');
+				case 'processing_error':
+					throw Error('Error processing payment');
+				default:
+					if (e.message === 'The customer must have an active payment source attached.') {
+						throw Error('No payment source.');
+					}
+
+					console.log(e);
+					throw Error('unhandled error');
+			}
 		}
 	}
 }
