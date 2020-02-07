@@ -177,7 +177,13 @@ describe('test OAuth', () => {
 		it('should create a charge', async () => {
 			expect.assertions(1);
 
-			const charge = await myStripe.createCharge(350, 'usd', customer_id, process.env.STRIPE_ACCOUNT_NUMBER);
+			const charge = await myStripe.createCharge({
+				amount: 350,
+				currency: 'usd',
+				customer: customer_id,
+			}, {
+				stripe_account: process.env.STRIPE_ACCOUNT_NUMBER,
+			});
 
 			expect(charge).toBeDefined();
 		});

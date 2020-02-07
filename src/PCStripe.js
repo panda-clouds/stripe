@@ -104,17 +104,16 @@ class PCStripe {
 		}
 	}
 
-	async createCharge(amount, currency, customer_id, stripe_acct_num) {
+	async createCharge(details, options, never) {
 		let charge = null;
 
+		// TODO: remove after transition
+		if (never) {
+			throw Error('Please update PCStripe');
+		}
+
 		try {
-			charge = await this.stripe.charges.create({
-				amount: amount,
-				currency: currency,
-				customer: customer_id,
-			}, {
-				stripe_account: stripe_acct_num,
-			});
+			charge = await this.stripe.charges.create(details, options);
 
 			return charge;
 		} catch (e) {
