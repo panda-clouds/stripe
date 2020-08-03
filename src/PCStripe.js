@@ -59,6 +59,24 @@ class PCStripe {
 		return transfer;
 	}
 
+	async getAccount(customer_id = null) {
+		let customer = null;
+
+		try {
+			if (customer_id && customer_id.includes('cus')) {
+				customer = await this.stripe.customers.retrieve(customer_id);
+			}
+		} catch (e) {
+			this.processStripeError(e);
+		}
+
+		if (!customer) {
+			throw new Error('Unable to locate customer in stripe');
+		}
+
+		return customer;
+	}
+
 	async getOrCreateAccount(customer_id = null, email = null, metadata = null) {
 		let customer = null;
 

@@ -110,6 +110,22 @@ describe('test OAuth', () => {
 		});
 	});
 
+	describe('getAccount', () => {
+		it('should not create a customer', async () => {
+			expect.assertions(1);
+
+			await expect(myStripe.getAccount(null, 'blaNeverExist@mindmissiles.com', { name: 'first last' })).rejects.toThrow('Unable to locate customer in stripe');
+		});
+
+		it('should be able to retrieve the customer with getAccount', async () => {
+			expect.assertions(1);
+
+			const customer = await myStripe.getAccount(customer_id);
+
+			expect(customer.id).toBe(customer_id);
+		});
+	});
+
 	describe('addPaymentToken', () => {
 		let global_token = null;
 
