@@ -114,7 +114,7 @@ describe('test OAuth', () => {
 		it('should not create a customer', async () => {
 			expect.assertions(1);
 
-			await expect(myStripe.getAccount(null, 'blaNeverExist@mindmissiles.com', { name: 'first last' })).rejects.toThrow('Unable to locate customer in stripe');
+			await expect(myStripe.getAccount(null)).rejects.toThrow('Unable to locate customer in stripe');
 		});
 
 		it('should be able to retrieve the customer with getAccount', async () => {
