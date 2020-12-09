@@ -54,7 +54,7 @@ describe('test OAuth', () => {
 	});
 
 	// Test cannot run with stripes system without human interviention and is disabled for production test suites.
-	it('should fetch credentials from stripe using refresh', async () => {
+	xit('should fetch credentials from stripe using refresh', async () => {
 		expect.assertions(7);
 		const response = await myStripe.getUserIdFromStripeRefresh(refreshToken);
 
@@ -70,7 +70,7 @@ describe('test OAuth', () => {
 		expect(response.scope).toBe('read_write');
 	});
 
-	it('should make transfers', async () => {
+	xit('should make transfers', async () => {
 		expect.assertions(2);
 
 		// comment
@@ -163,7 +163,7 @@ describe('test OAuth', () => {
 		});
 	});
 
-	describe('updateCustomerWithToken', () => {
+	xdescribe('updateCustomerWithToken', () => {
 		it('should update the customer with the token', async () => {
 			expect.assertions(1);
 
@@ -173,7 +173,7 @@ describe('test OAuth', () => {
 		});
 	});
 
-	describe('createCharge', () => {
+	xdescribe('createCharge', () => {
 		it('should create a charge', async () => {
 			expect.assertions(1);
 
