@@ -104,7 +104,7 @@ class PCStripe {
 		}
 	}
 
-	async createCharge(amount, currency, customer_id, stripe_acct_num, metadata=null) {
+	async createCharge(amount, currency, customer_id, stripe_acct_num, metadata = null) {
 		let charge = null;
 
 		try {
