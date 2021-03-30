@@ -106,7 +106,7 @@ class PCStripe {
 			token = await this.stripe.tokens.create({
 				customer: global_id,
 			}, {
-				stripe_account: stripe_acct_num,
+				stripeAccount: stripe_acct_num,
 			});
 
 			return token;
