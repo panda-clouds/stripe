@@ -90,7 +90,7 @@ class PCStripe {
 				customer = await this.stripe.customers.create({
 					email: email ? email : 'n/a',
 					metadata: metadata,
-				}, { expand: ['sources', 'subscriptions'] });
+				});
 			}
 
 			return customer;
