@@ -82,14 +82,15 @@ class PCStripe {
 
 		try {
 			if (customer_id && customer_id.includes('cus')) {
-				customer = await this.stripe.customers.retrieve(customer_id);
+				// New Stripe API doesn't include sources or subscriptions which we need
+				customer = await this.stripe.customers.retrieve(customer_id, { expand: ['sources', 'subscriptions'] });
 			}
 
 			if (!customer) {
 				customer = await this.stripe.customers.create({
 					email: email ? email : 'n/a',
 					metadata: metadata,
-				});
+				}, { expand: ['sources', 'subscriptions'] });
 			}
 
 			return customer;
