@@ -59,6 +59,24 @@ class PCStripe {
 		return transfer;
 	}
 
+	async getAccount(customer_id = null) {
+		let customer = null;
+
+		try {
+			if (customer_id && customer_id.includes('cus')) {
+				customer = await this.stripe.customers.retrieve(customer_id);
+			}
+		} catch (e) {
+			this.processStripeError(e);
+		}
+
+		if (!customer) {
+			throw new Error('Unable to locate customer in stripe');
+		}
+
+		return customer;
+	}
+
 	async getOrCreateAccount(customer_id = null, email = null, metadata = null) {
 		let customer = null;
 
@@ -105,18 +123,16 @@ class PCStripe {
 		}
 	}
 
-	async createCharge(amount, currency, customer_id, stripe_acct_num, metadata = null) {
+	async createCharge(details, options, never) {
 		let charge = null;
 
+		// TODO: remove after transition
+		if (never) {
+			throw Error('Please update PCStripe');
+		}
+
 		try {
-			charge = await this.stripe.charges.create({
-				amount: amount,
-				currency: currency,
-				customer: customer_id,
-				metadata: metadata,
-			}, {
-				stripe_account: stripe_acct_num,
-			});
+			charge = await this.stripe.charges.create(details, options);
 
 			return charge;
 		} catch (e) {

@@ -1,7 +1,7 @@
 {
   "name": "@panda-clouds/stripe",
   "scripts": {
-    "pretest": "eslint .",
+    "pretest": "eslint --fix .",
     "test": "jest"
   },
   "description": "A Node wrapper for stripe",
