@@ -8,7 +8,7 @@ try {
 const PCStripe = require('../src/PCStripe.js');
 const myStripe = new PCStripe(process.env.STRIPE_SECRET_KEY);
 const globalStripe = new PCStripe(process.env.STRIPE_GLOBAL_SECRET_KEY);
-
+const expYear = 2050;
 
 // The OAuth Workflow requires UI intervention
 // Follow these steps to generate an auth Code
@@ -144,7 +144,7 @@ describe('test OAuth', () => {
 				card: {
 					number: '4242424242424242',
 					exp_month: 12,
-					exp_year: 2020,
+					exp_year: expYear,
 					cvc: '123',
 				},
 			});
@@ -249,31 +249,31 @@ describe('test OAuth', () => {
 		it('should error if the card was declined', async () => {
 			expect.assertions(1);
 
-			await expect(createTestUser('declined@spec.com', '4000000000000002', 12, 2020, 123)).rejects.toThrow('Payment declined');
+			await expect(createTestUser('declined@spec.com', '4000000000000002', 12, expYear, 123)).rejects.toThrow('Payment declined');
 		});
 
 		it('should error if the card is expired', async () => {
 			expect.assertions(1);
 
-			await expect(createTestUser('expired@spec.com', '4000000000000069', 12, 2020, 123)).rejects.toThrow('Card has expired');
+			await expect(createTestUser('expired@spec.com', '4000000000000069', 12, expYear, 123)).rejects.toThrow('Card has expired');
 		});
 
 		it('should error if the cvc is incorrect', async () => {
 			expect.assertions(1);
 
-			await expect(createTestUser('incorrect@spec.com', '4000000000000127', 12, 2020, 123)).rejects.toThrow('CVC does not match');
+			await expect(createTestUser('incorrect@spec.com', '4000000000000127', 12, expYear, 123)).rejects.toThrow('CVC does not match');
 		});
 
 		it('should error if the card number is invalid', async () => {
 			expect.assertions(1);
 
-			await expect(createTestUser('declined@spec.com', '4242424242424241', 12, 2020, 123)).rejects.toThrow('Invalid card number');
+			await expect(createTestUser('declined@spec.com', '4242424242424241', 12, expYear, 123)).rejects.toThrow('Invalid card number');
 		});
 
 		it('should error if there was a processing error', async () => {
 			expect.assertions(1);
 
-			await expect(createTestUser('processing@spec.com', '4000000000000119', 12, 2020, 123)).rejects.toThrow('Error processing payment');
+			await expect(createTestUser('processing@spec.com', '4000000000000119', 12, expYear, 123)).rejects.toThrow('Error processing payment');
 		});
 	});
 });

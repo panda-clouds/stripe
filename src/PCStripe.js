@@ -90,7 +90,7 @@ class PCStripe {
 				customer = await this.stripe.customers.create({
 					email: email ? email : 'n/a',
 					metadata: metadata,
-				}, { expand: ['sources', 'subscriptions'] });
+				});
 			}
 
 			return customer;
@@ -106,7 +106,7 @@ class PCStripe {
 			token = await this.stripe.tokens.create({
 				customer: global_id,
 			}, {
-				stripe_account: stripe_acct_num,
+				stripeAccount: stripe_acct_num,
 			});
 
 			return token;
